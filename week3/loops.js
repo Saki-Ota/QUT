@@ -123,8 +123,8 @@ return console.log(`No employee found`);
 
 
 
-// findEmployeeById(employees, 3);
-// findEmployeeById(employees, 10);
+findEmployeeById(employees, 3);
+findEmployeeById(employees, 10);
 
 const matchedSales = [];
 
