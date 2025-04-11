@@ -46,7 +46,6 @@ const getLatitudeLongitudeTimestamp = function (dataset) {
   });
 };
 
-// const newFlightsData = getNewFlightsData(flights, airports);
 
 // Step3
 //  Display information on all flight in the dataset
@@ -110,23 +109,6 @@ const findFlightsCodeshare = function (dataset, codeshareBoolean) {
   return result;
 };
 
-// Display all flights that mtach with aircraf type
-//First attempt
-/*{const findAircraftByType = function (dataset, aircraftType) {
-    let result = [];
-    for(let i =0; i < dataset.length; i++){
-        let aircrafts = dataset[i].aircraft;
-        for(let t=0; t < aircrafts.length; t++){
-            let aircraft = aircrafts[t];
-            console.log(aircraft)
-            if (aircraft === aircraftType) {
-                result.push(dataset[i]);
-            }
-        }
-        
-    }
-    return result
-}}*/
 // Refactored
 const findAircraftByType = function (dataset, aircraftType) {
   return dataset.filter((data) => data.aircraft.includes(aircraftType));
