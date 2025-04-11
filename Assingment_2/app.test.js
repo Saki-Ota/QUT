@@ -1,4 +1,4 @@
-const { airports, flights } = require("./app.js");
+const { airports, flights, newFlightsData, newAnalysisData } = require("./app.js");
 const {
   getNewFlightsData,
   getLatitudeLongitudeTimestamp,
@@ -15,29 +15,34 @@ const {
   getAverage,
   findAirportByIata,
 } = require("./app.js");
-const newFlightsData = getNewFlightsData(flights, airports);
-const newAnalysisData = getDataForAnalysis(newFlightsData);
+
+describe("Test getNewFlightsData function", () => {
+    test("Check it creates a new array and takes elements from airports dataset", () => {
+      expect(
+        getNewFlightsData(flights, airports)[0].destination_airport
+      ).toEqual({
+        altitude: 56,
+        city: "Argyle",
+        country: "Australia",
+        iata: "PUG",
+        id: 6312,
+        latitude: -32.5069007873535,
+        longitude: 137.716995239258,
+        name: "Port Augusta Airport",
+        timezone: 9.5,
+      });
+    });
+
+    test(('Check it grabs all fligts information from flights datasets and create a new array. the number of item should be the same as Flights dataset'), ()=>{
+        expect((getNewFlightsData(flights, airports)).length).toEqual(flights.length)
+    })
+});
 
 
 test("Check it creates a new array and takes elements from two passed datasets", () => {
   expect(getNewFlightsData(flights, airports)).toEqual(newFlightsData);
 });
 
-test("Check it creates a new array and takes elements from airports dataset", () => {
-  expect(getNewFlightsData(flights, airports)[0].destination_airport).toEqual(
-    {
-      altitude: 56,
-      city: "Argyle",
-      country: "Australia",
-      iata: "PUG",
-      id: 6312,
-      latitude: -32.5069007873535,
-      longitude: 137.716995239258,
-      name: "Port Augusta Airport",
-      timezone: 9.5,
-    }
-  );
-});
 
 test("", () => {
   expect(getLatitudeLongitudeTimestamp(newFlightsData)[0].destination_airport).toEqual(
@@ -51,6 +56,12 @@ test("", () => {
 
 test("Check it iterates through dataset and grabs all flights that matches given source and destination aiports IATA", () => {
     expect(findFlightWithAirportsIata(newFlightsData, "MEL", "SYD").length).toEqual(7);
+});
+
+test("Check it iterates through dataset and grabs all flights that matches given source and destination aiports IATA", () => {
+  expect(
+    findFlightWithAirportsIata(newFlightsData, "", "SYD")
+  ).toEqual([]);
 });
 
 test("Check it iterates through given dataset and grabs all flights that matches given airline name", () => {
@@ -88,6 +99,8 @@ test("Check it iterates through given dataset and grabs all flights that matches
 test("Check it loops through the given dataset and grabs all flights that given matches codeshare boolean ", () => {
   expect(findFlightsCodeshare(newFlightsData, true).length).toEqual(299);
 });
+
+
 
 test("Check it loops throught the given dataset and grabs all flights that mathces given aircraft type", () => {
   expect(findAircraftByType(newFlightsData, "Airbus A330")[0].aircraft).toEqual(

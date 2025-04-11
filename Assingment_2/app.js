@@ -46,7 +46,7 @@ const getLatitudeLongitudeTimestamp = function (dataset) {
   });
 };
 
-const newFlightsData = getNewFlightsData(flights, airports);
+// const newFlightsData = getNewFlightsData(flights, airports);
 
 // Step3
 //  Display information on all flight in the dataset
@@ -57,29 +57,36 @@ const displayFlightsInfo = function (dataset) {
 // Display all flights that match with an airport name.
 const findFlightWithAirportsIata = function (
   dataset,
-  sourceAriport,
+  sourceAirport,
   destinationAirport
 ) {
-  if (sourceAriport === "Any" && destinationAirport === "Any") {
+  if (sourceAirport === "Any" && destinationAirport === "Any") {
     return dataset;
   }
 
   // Case: source is "Any" — filter only by destination
-  if (sourceAriport === "Any") {
+  if (sourceAirport === "Any" || sourceAirport === undefined) {
     return dataset.filter((flight) => flight.destination_airport.iata === destinationAirport);
   }
 
   // Case: destination is "Any" — filter only by source
-  if (destinationAirport === "Any") {
+  if (destinationAirport === "Any" || destinationAirport === undefined) {
     return dataset.filter(
-      (flight) => flight.source_airport.iata === sourceAriport
+      (flight) => flight.source_airport.iata === sourceAirport
     );
   }
+
+
+  // Case: both airport is not fouund or undefined 
+  if(sourceAirport === undefined || destinationAirport === undefined){
+    return console.log("No flights found with the given source or destination airport.");
+  }
+  
 
   // Case: both are specific — filter by both
   return dataset.filter(
     (flight) =>
-      flight.source_airport.iata === sourceAriport &&
+      flight.source_airport.iata === sourceAirport &&
       flight.destination_airport.iata === destinationAirport
   );
 };
@@ -94,10 +101,33 @@ const findFlightWithAirlineName = function (dataset, airlineName) {
 
 // Display all fights that match with codeshare boolean
 const findFlightsCodeshare = function (dataset, codeshareBoolean) {
-  return dataset.filter((data) => data.codeshare === codeshareBoolean);
+  const result = dataset.filter((data) => data.codeshare === codeshareBoolean);
+    // Error handling
+  if(result.length === 0 || result === undefined){
+    return console.log("No flights found with the given codeshare boolean.");
+  }
+
+  return result;
 };
 
 // Display all flights that mtach with aircraf type
+//First attempt
+/*{const findAircraftByType = function (dataset, aircraftType) {
+    let result = [];
+    for(let i =0; i < dataset.length; i++){
+        let aircrafts = dataset[i].aircraft;
+        for(let t=0; t < aircrafts.length; t++){
+            let aircraft = aircrafts[t];
+            console.log(aircraft)
+            if (aircraft === aircraftType) {
+                result.push(dataset[i]);
+            }
+        }
+        
+    }
+    return result
+}}*/
+// Refactored
 const findAircraftByType = function (dataset, aircraftType) {
   return dataset.filter((data) => data.aircraft.includes(aircraftType));
 };
@@ -105,31 +135,39 @@ const findAircraftByType = function (dataset, aircraftType) {
 // Calculate time difference
 const calculateTimeDifference = function (
   dataset,
-  sourceAriportIata,
+  sourceAirportIata,
   destinationAirportIata
 ) {
   let sourceAirport = dataset.find(
-    (data) => data.source_airport.iata === sourceAriportIata
+    (data) => data.source_airport.iata === sourceAirportIata
   );
   let destinationAirport = dataset.find(
     (data) => data.destination_airport.iata == destinationAirportIata
   );
-  return Math.abs(
+  
+  const result = Math.abs(
     sourceAirport.source_airport.timezone -
       destinationAirport.destination_airport.timezone
   );
+
+  // Error handling
+  if(result === NaN || result === undefined){
+    return console.log("Could not calculate time difference as no flights found with the given source or destination airport.");
+  }
+
+  return result
 };
 
 // Calculate distance between two airports: The formula is from https://qiita.com/y_tsubasa/items/690b31fa2cacaf439762
 const calculateDistance = function (
   dataset,
-  sourceAirport,
-  destinationAirport
+  sourceAirportIATA,
+  destinationAirportIATA
 ) {
   const airportsData = findFlightWithAirportsIata(
     dataset,
-    sourceAirport,
-    destinationAirport
+    sourceAirportIATA,
+    destinationAirportIATA
   )[0];
   const R = Math.PI / 180;
   const sourceLatitude = airportsData.source_airport.latitude * R;
@@ -191,12 +229,30 @@ const getDataForAnalysis = function (dataset) {
 const getMinimum = function (dataset, element) {
   let elementsArray = dataset.map((data) => data[element]);
   elementsArray.sort((a, b) => a - b);
+
+  // Error handling
+  if(elementsArray.length === 0 || elementsArray === undefined){
+    return console.log("Could not get the minimum value as no flights found with the given element.");
+  }
+  if(elementsArray[0] === undefined){
+    return console.log("Could not get the minimum value as no flights found with the given element.");
+  }
+
   return elementsArray[0];
 };
 
 const getMaximum = function (dataset, element) {
   let elementsArray = dataset.map((data) => data[element]);
   elementsArray.sort((a, b) => (a > b ? -1 : 1));
+
+  // Error handling
+  if(elementsArray.length === 0 || elementsArray === undefined){
+    return console.log("Could not find the maximum value as no flights found with the given element.");
+  }
+  if(elementsArray[0] === undefined){
+    return console.log("Could not find the maximum value as no flights found with the given element.");
+  }
+
   return elementsArray[0];
 };
 
@@ -206,27 +262,43 @@ const getAverage = function (dataset, element) {
     sum += dataset[i][element];
   }
 
+    // Error handling
+    if(sum === 0 || sum === undefined){
+      return console.log("Could not caluculate average value with the given element.");
+    }
+
   return Math.floor((sum / dataset.length) * 100) / 100;
 };
 
 // Find Airport by IATA code
 const findAirportByIata = function (dataset, iataCode) {
-  return dataset.filter((data) => data.iata === iataCode);
+  const result = dataset.filter((data) => data.iata === iataCode);
+  // Error handling
+  if(result.length === 0 || result === undefined){
+    return console.log("No Aiport found with the given IATA code.");
+  }
+
+  return result
 };
 
 
 
+const newFlightsData = getNewFlightsData(flights, airports);
+const newLatitudeAndLongitude = getLatitudeLongitudeTimestamp(newFlightsData);
+const newAnalysisData = getDataForAnalysis(newFlightsData);
 
 module.exports = {
   airports,
   flights,
   newFlightsData,
+  newAnalysisData,
   getNewFlightsData,
   getLatitudeLongitudeTimestamp,
   displayFlightsInfo,
   findFlightWithAirportsIata,
-  findFlightWithAirlineName,
   findFlightsCodeshare,
+  findFlightWithAirlineName ,
+  calculateNumberOfFlight,
   findAircraftByType,
   calculateTimeDifference,
   calculateDistance,
