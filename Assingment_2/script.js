@@ -1,5 +1,5 @@
-import airports from './A2_Airports.json' with {type: 'json'};
-import flights from './A2_Flights.json' with {type: 'json'};
+import airports from './json/A2_Airports.json' with {type: 'json'};
+import flights from './json/A2_Flights.json' with {type: 'json'};
 import getNewFlightsData from './step1.js';
 import getLatitudeLongitudeTimestamp from './step2.js';
 import {
