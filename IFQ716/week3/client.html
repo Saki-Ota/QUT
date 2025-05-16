@@ -26,22 +26,34 @@
 
       async function getForm(event) {
         event.preventDefault();
-        let cat = document.querySelector("#cat").value;
+        let catName = document.querySelector("#cat").value; // get the value of the input
 
         let res = await fetch("http://localhost:3000/data", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
+          body: JSON.stringify({ cat: catName }), // send the value of the input
         });
-        let data = await res.json();
-        console.log(data);
-        getData();
+        
+        // Check if the response is ok
+        if(res.ok){
+          document.querySelector("#cat").value = ""; // clear the input
+          let newCatDiv = document.querySelector("#new-cat");
+
+          const newCatParagraph = document.createElement("p");
+          newCatParagraph.textContent = catName; // set the text content of the new cat
+          newCatDiv.appendChild(newCatParagraph); // append the new cat to the new-cat div
+          // await getData(); // call getData to refresh the data
+        } else {
+          alert("Error: " + res.statusText); // show an error message
+        }
       }
     </script>
 
     <h1>Naughty Client</h1>
     <div id="data"></div>
+    <div id="new-cat"></div>
 
     <form id="form" onsubmit="return getForm(event)">
       <input id="cat" />
