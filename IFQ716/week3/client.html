@@ -25,7 +25,7 @@
       getData();
 
       async function getForm(event) {
-        event.preventDefault();
+        event.preventDefault(); // prevent the default to re-load the page
         let catName = document.querySelector("#cat").value; // get the value of the input
 
         let res = await fetch("http://localhost:3000/data", {
