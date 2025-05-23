@@ -1,14 +1,76 @@
 <!DOCTYPE html>
 <html>
 <body>
-    <p id="weather">The current weather is: </p>
+  <form id="weatherForm">
+    <label for="location">Enter location: </label>
+    <input type="text" id="location" name="location" value="Brisbane" required />
+    <button type="submit">Get Weather</button>
+  </form>
+
+  <div id="weatherResult"></div>
+
+  <script>
+    const form = document.getElementById("weatherForm");
+    const resultDiv = document.getElementById("weatherResult");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      // 前の結果を削除
+      resultDiv.innerHTML = "";
+
+      const location = document.getElementById("location").value;
+
+      fetch(`http://localhost:3002/weather?location=${encodeURIComponent(location)}`)
+        .then(res => res.json())
+        .then(weather => {
+          const report = document.createElement("p");
+          report.textContent = `The current weather in ${location} is: ${weather.condition} ${weather.temperature}°C`;
+
+          const img = document.createElement("img");
+          img.src = "https:" + weather.icon; // iconのURLは // から始まるので https: を追加
+          img.alt = weather.condition;
+
+          resultDiv.appendChild(report);
+          resultDiv.appendChild(img);
+        })
+        .catch(err => {
+          resultDiv.textContent = "Failed to fetch weather data.";
+          console.error(err);
+        });
+    });
+  </script>
+</body>
+</html>
+
+<!-- <!DOCTYPE html>
+<html>
+<body>
+    <form id="weatherForm">
+        <label for="location">Enter location:</label>
+        <input type="text" id="location" name="location" required>
+        <button type="submit"> Get Weather Report</button>
+    </form>
+
+    <div id="weatherResult"></div>
+    <!-- <p id="weather">The current weather is: </p>
+    <div id="icon"></div> -->
     <script>
+        const weatherForm = document.getElementById('weatherForm');
+        const weatherResult = document.getElementById('weatherResult');
         fetch("http://localhost:3002/weather", { method: "GET" })
             .then(res => res.json())
             .then(weather => {
+                weatherResult.innerHTML = ""; // Clear previous results
+
                 const report = weather.condition + " " + weather.temperature + "°C";
-                document.getElementById("weather").appendChild(document.createTextNode(report));
+                weatherResult.appendChild(document.createTextNode(report));
+
+                const icon = document.createElement('img');
+                icon.src = "https:" + weather.icon;
+                icon.alt = weather.condition;
+                weatherResult.appendChild(icon);
             });
     </script>
 </body>
-</html>
+</html> -->
