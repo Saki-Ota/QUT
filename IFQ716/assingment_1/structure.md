@@ -1,7 +1,7 @@
 ### Route path 
-- The route path should follow the endpoints documented in Swagger
+- The route path should follow the endpoints documented in Swagger 
 
-## URL
+## Request URL
 # GET request
 - Movies
 /moveis/search/{title}
@@ -15,7 +15,11 @@
 /posters/add/{imdbId}
 
 ## Information source
+- Swagger: http://54.79.30.138:3000/
+- Review API: https://www.omdbapi.com/
+- Streaming API: https://rapidapi.com/hub
 - Combined Review and Streaming service information and create a new JSON which follows the above swagger response format
+
 # Review
 - Movie information and rating
 - https://www.omdbapi.com/#usage 
@@ -23,11 +27,12 @@
 
 # Streaming service
 - https://rapidapi.com/movie-of-the-night-movie-of-the-night-default/api/streaming-availability
+- Search by Imdb ID
 
 ## Exmaples responses
 # /movies/search/mist
 
-- Reqest URL: htttp:/localhost3000/moveis/search/mist
+- Reqest URL: htttp:/localhost3000/moveis/search/{title}
 - code 200
 - Response body
 {
@@ -39,7 +44,7 @@
 - Response header: content-type: application/json 
 
 # /movies/code/tt0884328
-- Requsest URL: htttp:/localhost3000/movies/data/tt0884328
+- Requsest URL: htttp:/localhost3000/movies/data/{imdbId}
 - {
   "details": {
     "Title": "The Mist",
