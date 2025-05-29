@@ -1,7 +1,7 @@
 ### Route path 
 - The route path should follow the endpoints documented in Swagger 
 
-## Request URL
+### Request URL
 # GET request
 - Movies
 /moveis/search/{title}
@@ -14,6 +14,7 @@
 - Poster
 /posters/add/{imdbId}
 
+### Movies 
 ## Information source
 - Swagger: http://54.79.30.138:3000/
 - Review API: https://www.omdbapi.com/
@@ -30,7 +31,7 @@
 - Search by Imdb ID
 
 ## Exmaples responses
-# /movies/search/mist
+# /movies/search/{title}
 
 - Reqest URL: htttp:/localhost3000/moveis/search/{title}
 - code 200
@@ -43,7 +44,7 @@
 
 - Response header: content-type: application/json 
 
-# /movies/code/tt0884328
+# /movies/code/{imdvId}
 - Requsest URL: htttp:/localhost3000/movies/data/{imdbId}
 - {
   "details": {
@@ -92,7 +93,27 @@
   }
 }
 
-#
+
+### Poster
+## GET request 
+# /posters/{imdbId}
+- this request retrieves an image from the local folder (images) which matches with the given IMDb ID. 
+- Request URL: /posters/{imdbId}
+- Respond headers :  content-type: image/png 
+- Respond body : (when it is successful)
+   an image from the local  images folder that IMDb ID matches with request endpoint's IMDb ID.
+
+
+## POST request
+# /posters/add/{imdbId}
+- this request upload an image to store it in the local images folder and link the given IMDb ID to the image
+- Request URL: /posters/add/{imdbID}
+- Respond headers :  content-type: application/json 
+- Respond body : (when it is successful)
+{
+  "error": false,
+  "message": "Poster Uploaded Successfully"
+}
 
 
 
