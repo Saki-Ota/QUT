@@ -1,6 +1,7 @@
 // feference:
 // EncodeURIComponent : https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent
 // fs.createReadStream(filePath).pipe(res); https://www.geeksforgeeks.org/node-js-stream-readable-pipe-method/
+// formData : https://developer.mozilla.org/en-US/docs/Web/API/FormData
 
 document.addEventListener("DOMContentLoaded", () => {
   const moviesTitleForm = document.getElementById("searchMoviesByTitle");
@@ -38,6 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
     event.preventDefault();
     const imdbIdInput = document.getElementById("imdbIdInput").value;
 
+    console.log(imdbIdInput);
     try {
       // Fetching movie data by IMDb ID
       const response = await fetch(
@@ -89,6 +91,36 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(error);
       const resultsContainer = document.getElementById("posterResults");
       resultsContainer.innerHTML = "An error occurred while fetching data.";
+    }
+  });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const uploadPosterForm = document.getElementById("uploadPosterFile");
+  uploadPosterForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const imdbIdInput = document.getElementById("posterImdbIdInput").value;
+    const posterFileInput = document.getElementById("posterFileInput").files[0];
+    // create a Blob from the file input
+    const blob = new Blob([posterFileInput], {
+      type: "multipart/form-data",
+    });
+
+    try {
+      // Uploading the poster image
+      const response = await fetch(
+        `http://localhost:3000/posters/add?imdbId=${encodeURIComponent(
+          imdbIdInput
+        )}`,
+        {
+          method: "POST", // Use POST method for uploading since default is GET
+          body: formData, // Use FormData to send the file
+        }
+      );
+      const data = await response.json();
+    } catch (error) {
+      const resultsContainer = document.getElementById("posterResults");
+      resultsContainer.innerHTML = "An error occurred while uploading image.";
     }
   });
 });
