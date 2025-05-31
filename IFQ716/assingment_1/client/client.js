@@ -106,6 +106,11 @@ document.addEventListener("DOMContentLoaded", () => {
       type: "multipart/form-data",
     });
 
+    // The image does not saved correctly
+    // const form = new FormData();
+    // form.append("posterFile", posterFileInput); // Append the file to the FormData object
+    // form.append("imdbId", imdbIdInput); // Append the IMDb ID to the FormData object
+
     try {
       // Uploading the poster image
       const response = await fetch(
@@ -114,12 +119,12 @@ document.addEventListener("DOMContentLoaded", () => {
         )}`,
         {
           method: "POST", // Use POST method for uploading since default is GET
-          body: formData, // Use FormData to send the file
+          body: blob, // Use blob to send the file
         }
       );
       const data = await response.json();
     } catch (error) {
-      const resultsContainer = document.getElementById("posterResults");
+      const resultsContainer = document.getElementById("postersResults");
       resultsContainer.innerHTML = "An error occurred while uploading image.";
     }
   });
