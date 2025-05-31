@@ -13,7 +13,7 @@ const folderPath = "./posters";
 async function handleGetMovieReviewsByTitle(req, res) {
   const url = req.url;
   const movieTitle =
-    new URLSearchParams(url.split("?")[1]).get("title") || "Moana"; // provide a default movie title for testing
+    new URLSearchParams(url.split("?")[1]).get("title");
   // Check if the movie title is provided, if not return 400 error response
   if (!movieTitle) {
     res.writeHead(400, {
@@ -179,6 +179,53 @@ async function handleGetPosterImage(req, res) {
 };
 
 // Upload poster image by IMDb ID
+async function uploadPosterImage(req, res) {
+  const url = req.url;
+  const imdbId =
+    new URLSearchParams(url.split("?")[1]).get("imdbId");
+  const folderPath = "./posters";
+  const filePath = path.join(folderPath, `${imdbId}.jpg`);
+
+  if (!imdbId) {
+    res.writeHead(400, {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    });
+    res.end(
+      JSON.stringify({
+        error: true,
+        message: "You must supply an imdbID !",
+      })
+    );
+    return;
+  }
+
+  try {
+    // Write the file to the specified path
+    const writeStream = fs.createWriteStream(filePath);
+    req.pipe(writeStream);
+
+    writeStream.on("finish", () => {
+      res.writeHead(200, {
+        "Content-Type": "image/jpeg",
+        "Access-Control-Allow-Origin": "*",
+      });
+      res.end(JSON.stringify({ message: "Poster uploaded successfully!" }));
+    });
+  } catch (error) {
+    res.writeHead(500, {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    });
+    res.end(
+      JSON.stringify({
+        error: true,
+        message: "An error occurred while uploading the poster.",
+      })
+    );
+  }
+}
+
 
 
 function routing(req, res) {
@@ -188,7 +235,9 @@ function routing(req, res) {
     handleGetMoviesData(req, res);
   } else if (req.url.startsWith("/posters/") && req.method === "GET") {
     handleGetPosterImage(req, res);
-  } else {
+  } else if (req.url.startsWith("/posters/add") && req.method === "POST"){
+    uploadPosterImage(req, res);
+  }else {
     res.writeHead(404, {
       "Content-Type": "application/json",
     });
