@@ -3,7 +3,8 @@
 // fs.createReadStream(filePath).pipe(res); https://www.geeksforgeeks.org/node-js-stream-readable-pipe-method/
 // formData : https://developer.mozilla.org/en-US/docs/Web/API/FormData
 
-document.addEventListener("DOMContentLoaded", () => {
+// This script handles the client-side functionality for searching movies by title or IMDb ID,
+function fetchAndDisplayMoviesByTitle() {
   const moviesTitleForm = document.getElementById("searchMoviesByTitle");
   moviesTitleForm.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -16,9 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
           titleInput
         )}`
       );
-      console.log(response);
       const data = await response.json();
-      console.log(data);
 
       // Appending the search results to the results container
       const resultsContainer = document.getElementById("movieResults");
@@ -31,9 +30,10 @@ document.addEventListener("DOMContentLoaded", () => {
       resultsContainer.innerHTML = "An error occurred while fetching data.";
     }
   });
-});
+}
 
-document.addEventListener("DOMContentLoaded", () => {
+// This function fetches and displays movie posters by IMDb ID
+function fetchAndDisplayMoviessById() {
   const moviesImdbIdForm = document.getElementById("searchMoviesById");
   moviesImdbIdForm.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -47,9 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
           imdbIdInput
         )}`
       );
-      console.log(response);
       const data = await response.json();
-      console.log(data);
 
       // Appending the search results to the results container
       const resultsContainer = document.getElementById("movieResults");
@@ -62,9 +60,10 @@ document.addEventListener("DOMContentLoaded", () => {
       resultsContainer.innerHTML = "An error occurred while fetching data.";
     }
   });
-});
+}
 
-document.addEventListener("DOMContentLoaded", () => {
+// This function fetches and displays movie posters by IMDb ID
+function fetchAndDisplayPostersById() {
   const postersImdbIdForm = document.getElementById("searchPostersById");
   postersImdbIdForm.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -93,14 +92,16 @@ document.addEventListener("DOMContentLoaded", () => {
       resultsContainer.innerHTML = "An error occurred while fetching data.";
     }
   });
-});
+}
 
-document.addEventListener("DOMContentLoaded", () => {
+// This function uploads a poster image for a movie by IMDb ID
+function uploadPosterImage() {
   const uploadPosterForm = document.getElementById("uploadPosterFile");
   uploadPosterForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     const imdbIdInput = document.getElementById("posterImdbIdInput").value;
     const posterFileInput = document.getElementById("posterFileInput").files[0];
+
     // create a Blob from the file input
     const blob = new Blob([posterFileInput], {
       type: "multipart/form-data",
@@ -128,4 +129,11 @@ document.addEventListener("DOMContentLoaded", () => {
       resultsContainer.innerHTML = "An error occurred while uploading image.";
     }
   });
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  fetchAndDisplayMoviesByTitle();
+  fetchAndDisplayMoviessById();
+  fetchAndDisplayPostersById();
+  uploadPosterImage();
 });
