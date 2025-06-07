@@ -7,16 +7,27 @@
 </head>
 <body>
     <h1>Movie Search</h1>
-    <form id="searchForm">
-        <input type="text" id="searchInput" placeholder="Enter movie name" required>
+    <form id="searchMoviesByTitle">
+        <input type="text" id="titleInput" name="title" placeholder="Enter movie title" required>
         <button type="submit">Search</button>
     </form>
-    <div id="movie_results"></div>
+    <form id="searchMoviesById">
+        <input type="text" id="imdbIdInput" name="imdbId" placeholder="Enter movie IMDB ID" required>
+        <button type="submit">Search</button>
+    </form>
+    <div id="movieResults"></div>
     <h1>Poster Search</h1>
-    <form id="searchPosterForm">
-        <input type="text" id="searchPosterInput" placeholder="Enter movie name" required>
+    <form id="searchPostersById">
+        <input type="text" id="searchPostersInput" name="imdbId" placeholder="Enter movie name" required>
         <button type="submit">Search</button>
     </form>
-    <div id="poster_results"></div>
+    <form id="uploadPosterFile">
+        <input type="file" id="posterFileInput"  required>
+        <input type="text" id="posterImdbIdInput" name="imdbId" placeholder="Enter movie IMDB ID" required>
+        <button type="submit">Upload Poster</button>
+    </form>
+    <div id="postersResults"></div>
+    
+    <script src="client.js" defer></script>
 </body>
 </html>
