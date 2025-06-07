@@ -1,3 +1,9 @@
+// references:
+// fs.existSync(): https://nodejs.org/en/learn/manipulating-files/working-with-folders-in-nodejs
+// fs.writeFile(): https://nodejs.org/en/learn/manipulating-files/writing-files-in-nodejs, https://www.geeksforgeeks.org/node-js-fs-writefile-method/
+// JS blob : https://developer.mozilla.org/ja/docs/Web/API/Blob
+// multipart/form-data : https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/POST#multipart_form_data
+
 require("dotenv").config();
 const http = require("http");
 const fs = require("fs");
@@ -12,8 +18,7 @@ const folderPath = "./posters";
 // Fetch Movie Reviews API by title
 async function handleGetMovieReviewsByTitle(req, res) {
   const url = req.url;
-  const movieTitle =
-    new URLSearchParams(url.split("?")[1]).get("title");
+  const movieTitle = new URLSearchParams(url.split("?")[1]).get("title");
   // Check if the movie title is provided, if not return 400 error response
   if (!movieTitle) {
     res.writeHead(400, {
@@ -63,12 +68,12 @@ async function getMovieReviewsById(imdbId) {
 
 // Fetch Streaming Availability API by IMDb ID
 async function getStreamingData(imdbId) {
-  const apiUrl = `https://${STREAMINGAPI_BASE}/shows/${imdbId}?series_granularity=episode&output_language=en&country=au`;
+  const apiUrl = `https://${STREAMINGAPI_BASE}/shows/${imdbId}?output_language=en&country=au`;
   const options = {
     method: "GET",
     headers: {
       "x-rapidapi-key": STREAMINGAPI_KEY,
-      "x-rapidapi-host": STREAMINGAPI_BASE,
+      "x-rapidapi-host": STREAMINGAPI_BASE
     },
   };
 
@@ -80,8 +85,7 @@ async function getStreamingData(imdbId) {
 // Get movies reviews and streaming data by IMDb ID, combining both data sources
 async function handleGetMoviesData(req, res) {
   const url = req.url;
-  const imdbId =
-    new URLSearchParams(url.split("?")[1]).get("imdbId");
+  const imdbId = new URLSearchParams(url.split("?")[1]).get("imdbId");
 
   // Check if the IMDb ID is provided, if not return 400 error response
   if (!imdbId) {
@@ -127,8 +131,7 @@ async function handleGetMoviesData(req, res) {
 // GET poster request by IMDb ID
 async function handleGetPosterImage(req, res) {
   const url = req.url;
-  const imdbId =
-    new URLSearchParams(url.split("?")[1]).get("imdbId");
+  const imdbId = new URLSearchParams(url.split("?")[1]).get("imdbId");
   const filePath = path.join(folderPath, `${imdbId}.jpg`);
   // console.log(filePath);
   if (!imdbId) {
@@ -153,7 +156,8 @@ async function handleGetPosterImage(req, res) {
       });
       // create a read stream to send the image file
       fs.createReadStream(filePath).pipe(res);
-    } else { // If the file does not exist, return a 404 error response
+    } else {
+      // If the file does not exist, return a 404 error response
       res.writeHead(404, {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
@@ -176,13 +180,12 @@ async function handleGetPosterImage(req, res) {
       })
     );
   }
-};
+}
 
 // Upload poster image by IMDb ID
-async function uploadPosterImage(req, res) {
+async function handleUploadPosterImage(req, res) {
   const url = req.url;
-  const imdbId =
-    new URLSearchParams(url.split("?")[1]).get("imdbId");
+  const imdbId = new URLSearchParams(url.split("?")[1]).get("imdbId");
   const folderPath = "./posters";
   const filePath = path.join(folderPath, `${imdbId}.jpg`);
 
@@ -226,8 +229,6 @@ async function uploadPosterImage(req, res) {
   }
 }
 
-
-
 function routing(req, res) {
   if (req.url.startsWith("/movies/search") && req.method === "GET") {
     handleGetMovieReviewsByTitle(req, res);
@@ -235,9 +236,9 @@ function routing(req, res) {
     handleGetMoviesData(req, res);
   } else if (req.url.startsWith("/posters/") && req.method === "GET") {
     handleGetPosterImage(req, res);
-  } else if (req.url.startsWith("/posters/add") && req.method === "POST"){
-    uploadPosterImage(req, res);
-  }else {
+  } else if (req.url.startsWith("/posters/add") && req.method === "POST") {
+    handleUploadPosterImage(req, res);
+  } else {
     res.writeHead(404, {
       "Content-Type": "application/json",
     });
