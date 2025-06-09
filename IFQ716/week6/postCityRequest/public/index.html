@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Update City Population</title>
+</head>
+<body>
+  <h1>Update City Population</h1>
+  <!-- sending request to the endpoint -->
+  <form action="http://localhost:3000/api/update" method="POST"> 
+    <label for="City">City:</label><br>
+    <input type="text" id="City" name="City" required><br><br>
+
+    <label for="CountryCode">Country Code:</label><br>
+    <input type="text" id="CountryCode" name="CountryCode" required><br><br>
+
+    <label for="Pop">Population:</label><br>
+    <input type="number" id="Pop" name="Pop" required><br><br>
+
+    <button type="submit">Update</button>
+  </form>
+</body>
+</html>
