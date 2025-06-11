@@ -1,0 +1,164 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "World City API",
+    "description": "This is a simple Express API based on the World Cities Database. It supports basic city and province listings, along with filtering based on Country Code",
+    "termsOfService": "https://swagger.io/terms/",
+    "contact": { "email": "apiteam@swagger.io" },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.26"
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "https://swagger.io"
+  },
+  "servers": [{ "url": "/" }],
+  "tags": [
+    {
+      "name": "query",
+      "description": "API queries based on city and optional country code."
+    }
+  ],
+  "paths": {
+    "/api/city": {
+      "get": {
+        "tags": ["query"],
+        "summary": "List cities and provinces",
+        "description": "Full listing of cities and their provinces for the database",
+        "operationId": "listCitiesAndDistricts",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "Error": {
+                      "type": "string",
+                      "enum": ["true", "false"]
+                    },
+                    "Message": {
+                      "type": "string",
+                      "enum": ["Success", "Failure"]
+                    },
+                    "City": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": { "type": "string" },
+                          "district": { "type": "string" }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/city/{CountryCode}": {
+      "get": {
+        "tags": ["query"],
+        "summary": "List cities by country code",
+        "description": "Returns all cities that match a given country code",
+        "operationId": "listCitiesByCountryCode",
+        "parameters": [
+          {
+            "name": "CountryCode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The country code to filter cities by"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "Error": { "type": "string" },
+                    "Message": { "type": "string" },
+                    "City": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "ID": { "type": "integer" },
+                          "Name": { "type": "string" },
+                          "CountryCode": { "type": "string" },
+                          "District": { "type": "string" },
+                          "Population": { "type": "integer" }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/update": {
+      "post": {
+        "tags": ["query"],
+        "summary": "Update population of a city",
+        "description": "Updates the population field of a given city",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "City": { "type": "string" },
+                  "CountryCode": { "type": "string" },
+                  "Pop": { "type": "integer" }
+                },
+                "required": ["City", "CountryCode", "Pop"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "Error": { "type": "boolean" },
+                    "Message": { "type": "string" },
+                    "UpdatedRows": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "City not found"
+          },
+          "400": {
+            "description": "Missing required fields"
+          },
+          "500": {
+            "description": "Error updating population"
+          }
+        }
+      }
+    }
+  }
+}
