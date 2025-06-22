@@ -1,3 +1,4 @@
+const { parse } = require("dotenv");
 const express = require("express");
 const router = express.Router();
 
@@ -17,10 +18,15 @@ router.get("/", function (req, res, next) {
 
 // /api/city/:CountryCode
 router.get("/:CountryCode", function (req, res, next) {
+  const limit = parseInt(req.query.limit, 10) || 10; // Default limit to 10 if not provided
+  const sortBy = req.query.sortBy || "Name"; // Default sort by Name if not provided
+  const sortOrder = req.query.sortOrder || "asc"; // Default sort order to ascending if not provided
   req.db
     .from("city")
     .select("*")
     .where("CountryCode", "=", req.params.CountryCode)
+    .limit(limit) // Apply the limit to the query
+    .sortBy(sortBy, sortOrder) // Apply sorting based on query parameters
     .then((rows) => {
       res.json({ Error: false, Message: "Success", City: rows });
     })

@@ -18,7 +18,7 @@ router.post("/", authorization, function (req, res, next) {
     .update({ Population: Pop })
     .then((count) => {
       if (count > 0) {
-        res.json({
+        res.status(201).json({
           Error: false,
           Message: "Population updated successfully",
           UpdatedRows: count,
