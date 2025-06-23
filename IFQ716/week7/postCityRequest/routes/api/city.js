@@ -26,7 +26,7 @@ router.get("/:CountryCode", function (req, res, next) {
     .select("*")
     .where("CountryCode", "=", req.params.CountryCode)
     .limit(limit) // Apply the limit to the query
-    .sortBy(sortBy, sortOrder) // Apply sorting based on query parameters
+    // .sortBy(sortBy, sortOrder) // Apply sorting based on query parameters
     .then((rows) => {
       res.json({ Error: false, Message: "Success", City: rows });
     })

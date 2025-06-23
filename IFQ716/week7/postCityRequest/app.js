@@ -29,8 +29,10 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+// week6
+app.use(express.json()); // middleware to parse JSON bodies
+app.use(express.urlencoded({ extended: false })); // middleware to parse URL-encoded bodies
+// week7
 app.use(cookieParser());
 app.use(helmet());
 app.use(express.static(path.join(__dirname, 'public')));

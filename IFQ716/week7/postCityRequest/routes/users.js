@@ -85,7 +85,7 @@ router.post("/register", function (req, res, next) {
       }
 
       const saltRounds = 10;
-      const hash = bcrypt.hashSync(password, saltRounds);
+      const hash = bcrypt.hashSync(password, saltRounds); // Hash the password
       return req.db.from("users").insert({ email, hash });
     })
     .then((result) => {
