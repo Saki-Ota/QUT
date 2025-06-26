@@ -9,6 +9,11 @@ router.get("/", async function (req, res, next) {
   }
 
   try {
+    const movie = await req
+      .db("basics")
+      .select("primaryTitle", "startYear", "runtimeMinutes", "genres")
+      .where("tconst", imdbId);
+
     const actors = await req
       .db("principals as p")
       .join("names as n", "p.nconst", "n.nconst")
@@ -30,13 +35,26 @@ router.get("/", async function (req, res, next) {
       .where("p.tconst", imdbId)
       .andWhere("p.category", "writer");
 
+    const ratings = await req
+      .db("ratings")
+      .select("averageRating")
+      .where("tconst", imdbId);
+
     res.json({
       Error: false,
       Message: "Success",
       Data: {
-        actors: actors.map((row) => row.primaryName),
-        directors: directors.map((row) => row.primaryName),
-        writers: writers.map((row) => row.primaryName),
+        Title: movie[0]?.primaryTitle || "N/A",
+        Year: movie[0]?.startYear || "N/A",
+        Runtime: movie[0]?.runtimeMinutes || "N/A",
+        Genres: movie[0]?.genres || "N/A",
+        Actors: actors.map((row) => row.primaryName),
+        Director: directors.map((row) => row.primaryName),
+        Writer: writers.map((row) => row.primaryName),
+        Ratings: ratings.map((row) => ({
+          Source: "Internet Movie Database",
+          Value: row.averageRating || "N/A",
+        })),
       },
     });
   } catch (err) {
