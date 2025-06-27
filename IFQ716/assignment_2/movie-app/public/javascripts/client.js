@@ -5,13 +5,25 @@ function fetchAndDisplayMoviesByTitle() {
     event.preventDefault();
     const titleInput = document.getElementById("titleInput").value;
     const yearInput = document.getElementById("yearInput").value;
+    const pageInput = document.getElementById("pageInput").value;
 
     try {
       // Fetching movie data by title
       let url = `http://localhost:3000/movies/search?title=${encodeURIComponent(titleInput)}`;
       if (yearInput) {
+        // if (isNaN(yearInput) || !/^\d{4}$/.test(yearInput)) {
+        //   throw new Error("Invalid year format. Format must be yyyy");
+        // }
         url += `&year=${encodeURIComponent(yearInput)}`;
+      } 
+
+      if (pageInput) {
+        // if (isNaN(pageInput) || pageInput < 1) {
+        //   throw new Error("Invalid page number. It must be a positive integer.");
+        // }
+        url += `&page=${encodeURIComponent(pageInput)}`;
       }
+      
       const response = await fetch(url);
       const data = await response.json();
 
@@ -102,11 +114,6 @@ function uploadPosterImage() {
     const blob = new Blob([posterFileInput], {
       type: "multipart/form-data",
     });
-
-    // The image does not saved correctly
-    // const form = new FormData();
-    // form.append("posterFile", posterFileInput); // Append the file to the FormData object
-    // form.append("imdbId", imdbIdInput); // Append the IMDb ID to the FormData object
 
     try {
       // Uploading the poster image
