@@ -110,10 +110,9 @@ function uploadPosterImage() {
     const imdbIdInput = document.getElementById("posterImdbIdInput").value;
     const posterFileInput = document.getElementById("posterFileInput").files[0];
 
-    // create a Blob from the file input
-    const blob = new Blob([posterFileInput], {
-      type: "multipart/form-data",
-    });
+    const formData = new FormData();
+    formData.append("imdbId", imdbIdInput);
+    formData.append("poster", posterFileInput);
 
     try {
       // Uploading the poster image
@@ -123,10 +122,17 @@ function uploadPosterImage() {
         )}`,
         {
           method: "POST", // Use POST method for uploading since default is GET
-          body: blob, // Use blob to send the file
+          body: formData,
         }
       );
       const data = await response.json();
+      const resultsContainer = document.getElementById("postersResults");
+      resultsContainer.innerHTML = ""; // Clear previous results
+      if (data.Error) {
+        resultsContainer.innerHTML = `Error: ${data.Message}`;
+      } else {
+        resultsContainer.innerHTML = `Poster uploaded successfully for IMDb ID: ${data.Data.imdbId}`;
+      }
     } catch (error) {
       const resultsContainer = document.getElementById("postersResults");
       resultsContainer.innerHTML = "An error occurred while uploading image.";
