@@ -1,4 +1,5 @@
 // multer - https://www.geeksforgeeks.org/node-js/upload-files-to-local-public-folder-in-nodejs-using-multer/
+// https://www.freecodecamp.org/news/simplify-your-file-upload-process-in-express-js/
 
 const express = require("express");
 const router = express.Router();
@@ -24,7 +25,42 @@ router.get("/", function (req, res) {
 });
 
 // Upload poster using multer
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, "../public/images"));
+  },
+  filename: (req, file, cb) => {
+    const imdbId = req.body.imdbId;
+    if (!imdbId) {
+      return cb(new Error("Missing imdbId"));
+    }
+    cb(null, `${imdbId}.jpg`);
+  },
+});
 
+const upload = multer({ storage: storage });
 
+router.post("/add", upload.single("poster"), (req, res) => {
+  const imdbId = req.body.imdbId;
+
+  if (!imdbId) {
+    return res
+      .status(400)
+      .json({ Error: true, Message: "Missing imdbId in body" });
+  }
+
+  if (!req.file) {
+    return res.status(400).json({ Error: true, Message: "No file uploaded" });
+  }
+
+  res.json({
+    Error: false,
+    Message: "Poster uploaded successfully",
+    Data: {
+      imdbId: imdbId,
+      filePath: `/images/${imdbId}.jpg`,
+    },
+  });
+});
 
 module.exports = router;
