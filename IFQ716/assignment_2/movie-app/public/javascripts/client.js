@@ -9,13 +9,15 @@ function fetchAndDisplayMoviesByTitle() {
 
     try {
       // Fetching movie data by title
-      let url = `http://localhost:3000/movies/search?title=${encodeURIComponent(titleInput)}`;
+      let url = `https://localhost:3000/movies/search?title=${encodeURIComponent(
+        titleInput
+      )}`;
       if (yearInput) {
         // if (isNaN(yearInput) || !/^\d{4}$/.test(yearInput)) {
         //   throw new Error("Invalid year format. Format must be yyyy");
         // }
         url += `&year=${encodeURIComponent(yearInput)}`;
-      } 
+      }
 
       if (pageInput) {
         // if (isNaN(pageInput) || pageInput < 1) {
@@ -23,7 +25,7 @@ function fetchAndDisplayMoviesByTitle() {
         // }
         url += `&page=${encodeURIComponent(pageInput)}`;
       }
-      
+
       const response = await fetch(url);
       const data = await response.json();
 
@@ -51,7 +53,7 @@ function fetchAndDisplayMoviessById() {
     try {
       // Fetching movie data by IMDb ID
       const response = await fetch(
-        `http://localhost:3000/movies/data?imdbId=${encodeURIComponent(
+        `https://localhost:3000/movies/data?imdbId=${encodeURIComponent(
           imdbIdInput
         )}`
       );
@@ -80,7 +82,7 @@ function fetchAndDisplayPostersById() {
     try {
       // Fetching poster image by IMDb ID
       const response = await fetch(
-        `http://localhost:3000/posters/?imdbId=${encodeURIComponent(
+        `https://localhost:3000/posters/?imdbId=${encodeURIComponent(
           imdbIdInput
         )}`
       );
@@ -117,7 +119,7 @@ function uploadPosterImage() {
     try {
       // Uploading the poster image
       const response = await fetch(
-        `http://localhost:3000/posters/add?imdbId=${encodeURIComponent(
+        `https://localhost:3000/posters/add?imdbId=${encodeURIComponent(
           imdbIdInput
         )}`,
         {
@@ -139,6 +141,7 @@ function uploadPosterImage() {
     }
   });
 }
+
 
 document.addEventListener("DOMContentLoaded", () => {
   fetchAndDisplayMoviesByTitle();

@@ -14,7 +14,7 @@ function handleLogin() {
     }
 
     try {
-      const response = await fetch("http://localhost:3000/users/login", {
+      const response = await fetch("https://localhost:3000/users/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -25,7 +25,17 @@ function handleLogin() {
         }),
       });
 
+      console.log(response);
+
       if (!response.ok) {
+        if (response.status === 404) {
+          resultsContainer.innerHTML = "User does not exist. Please register.";
+          const registerButton = document.createElement("a");
+          registerButton.href = "/register.html";
+          registerButton.textContent = "Register here";
+          resultsContainer.appendChild(registerButton);
+          return;
+        }
         throw new Error("Login failed. Please check your credentials.");
       }
 
@@ -43,4 +53,3 @@ function handleLogin() {
 document.addEventListener("DOMContentLoaded", () => {
   handleLogin();
 });
-  
