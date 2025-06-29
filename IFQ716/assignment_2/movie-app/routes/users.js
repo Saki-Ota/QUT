@@ -30,26 +30,47 @@ router.post("/login", function (req, res, next) {
 
     // compare password with hash
     const user = users[0];
-    return bcrypt.compare(password, user.password).then((match) => {
-      if (!match) {
-        console.log("Passwords do not match");
-        return res.status(401).json({
+    return bcrypt
+      .compare(password, user.password)
+      .then((match) => {
+        if (!match) {
+          console.log("Passwords do not match");
+          return res.status(401).json({
+            Error: true,
+            Message: "Incorrect password or email",
+          });
+        }
+
+        // create JWT token
+        const expires_in = 60 * 60 * 24; // 1 day
+        const exp = Math.floor(Date.now() / 1000) + expires_in;
+        const token = jwt.sign(
+          { email: user.email, exp },
+          process.env.JWT_SECRET
+        );
+
+        // Set the token in a cookie
+        res
+          .cookie("token", token, {
+            httpOnly: true, // Prevent client-side JavaScript from accessing the cookie
+            secure: process.env.NODE_ENV === "production", // Use secure cookies in production
+            sameSite: "Strict", // Prevent CSRF attacks
+            maxAge: expires_in * 1000, // Convert seconds to milliseconds
+          })
+          .status(200)
+          .json({
+            token,
+            token_type: "Bearer",
+            expires_in,
+          });
+      })
+      .catch((err) => {
+        console.error("Error comparing passwords:", err);
+        res.status(500).json({
           Error: true,
-          Message: "Incorrect password or email"
+          Message: "Internal server error",
         });
-      }
-
-      // create JWT token
-      const expires_in = 60 * 60 * 24; // 1 day
-      const exp = Math.floor(Date.now() / 1000) + expires_in;
-      const token = jwt.sign({ exp }, process.env.JWT_SECRET);
-
-      res.status(200).json({
-        token,
-        token_type: "Bearer",
-        expires_in,
       });
-    });
   });
 });
 
