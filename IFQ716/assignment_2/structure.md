@@ -84,3 +84,10 @@ Create a new user information in movie DB. Authentication is required
 
 - Post /user/login
 Check user information in movie DB. Authenticatin is required 
+
+
+# Steps to create movie app?
+1. create movie GET endpoints and interact with movie DB
+2. create poster GET and POST endpoing and interact with local directory
+3. create user POST endpoint for register and login
+4. setup authentication and add it 2 and 3? 
