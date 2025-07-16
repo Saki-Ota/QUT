@@ -6,6 +6,10 @@ var logger = require('morgan');
 const options = require('./knexfile.js')
 const knex = require('knex')(options);
 const cors = require("cors");
+require("dotenv").config();
+const authorization = require("./middleware/authorization");
+const helment = require("helmet");
+
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -28,6 +32,7 @@ app.use((req, res, next) => {
   next();
 }); 
 app.use(cors())
+app.use(helment());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

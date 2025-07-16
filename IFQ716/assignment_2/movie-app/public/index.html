@@ -9,6 +9,8 @@
     <h1>Movie Search</h1>
     <form id="searchMoviesByTitle">
         <input type="text" id="titleInput" name="title" placeholder="Enter movie title" required>
+        <input type="number" id="yearInput" name="year" placeholder="Enter year">
+        <input type="number" id="pageInput" name="page" placeholder="Enter page number">
         <button type="submit">Search</button>
     </form>
     <form id="searchMoviesById">
@@ -21,7 +23,7 @@
         <input type="text" id="searchPostersInput" name="imdbId" placeholder="Enter movie name" required>
         <button type="submit">Search</button>
     </form>
-    <form id="uploadPosterFile">
+    <form id="uploadPosterFile"enctype="multipart/form-data">
         <input type="file" id="posterFileInput"  required>
         <input type="text" id="posterImdbIdInput" name="imdbId" placeholder="Enter movie IMDB ID" required>
         <button type="submit">Upload Poster</button>
