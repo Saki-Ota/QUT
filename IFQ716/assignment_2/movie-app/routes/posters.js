@@ -6,8 +6,9 @@ const router = express.Router();
 const fs = require("fs");
 const path = require("path");
 const multer = require("multer");
+const authorization = require("../middleware/authorization");
 
-router.get("/", function (req, res) {
+router.get("/", authorization, function (req, res) {
   const { imdbId } = req.query;
 
   if (!imdbId) {
@@ -40,7 +41,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-router.post("/add", upload.single("poster"), (req, res) => {
+router.post("/add", authorization, upload.single("poster"), (req, res) => {
   const imdbId = req.body.imdbId;
 
   if (!imdbId) {
@@ -60,6 +61,9 @@ router.post("/add", upload.single("poster"), (req, res) => {
       imdbId: imdbId,
       filePath: `/images/${imdbId}.jpg`,
     },
+  }).catch((err) => {
+    console.error("Error uploading poster:", err);
+    res.status(500).json({ Error: true, Message: "Internal server error" });
   });
 });
 

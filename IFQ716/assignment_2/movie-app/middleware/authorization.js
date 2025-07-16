@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+
 // cookie method for JWT authentication
 module.exports = function (req, res, next) {
   // Get the JWT token from cookies

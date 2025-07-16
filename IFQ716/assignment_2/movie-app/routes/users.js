@@ -1,3 +1,6 @@
+// reference use cookie and JWT : https://dev.to/franciscomendes10866/using-cookies-with-jwt-in-node-js-8fn
+// https://medium.com/@sajaldewangan/authentication-using-cookies-with-jwt-in-expressjs-900467c3b8d3
+
 var express = require("express");
 var router = express.Router();
 const jwt = require("jsonwebtoken");
@@ -22,7 +25,7 @@ router.post("/login", function (req, res, next) {
   queryUser.then((users) => {
     if (users.length === 0) {
       console.log("User does not exist");
-      return res.status(401).json({
+      return res.status(404).json({
         Error: true,
         Message: "User does not exist",
       });
