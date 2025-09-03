@@ -1,3 +1,12 @@
+import HeroCarousel from "./HeroCarousel";
+import Locations from "./Locations";
+import BluePart from "./BluePart";
+
 export default function Home() {
-  return <h1>Home</h1>;
+  return (
+    <main className="flex-grow-1">
+        <HeroCarousel />
+        <Locations />
+        <BluePart />
+    </main> );
 }

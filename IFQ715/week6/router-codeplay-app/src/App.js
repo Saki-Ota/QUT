@@ -1,4 +1,7 @@
-import './App.css';
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./style.css";
+import { Container } from "react-bootstrap";
+
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Home from "./Home";
 import Location from "./Location";
@@ -8,28 +11,21 @@ import Register from "./User/Register";
 import Header from "./Components/Header";
 import Footer from "./Components/Footer";
 
-
-
-
-function App() {
+export default function App() {
   return (
-    <div className="App">
-      <BrowserRouter>
-        <div className="App">
-          <Header />
-          {/* the content */}
+    <BrowserRouter>
+      <div className="d-flex flex-column bg-light" id="wrapper">
+        <Header />
+        <Container fluid className="pt-2">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/location" element={<Location />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
           </Routes>
-          <Footer />
-        </div>
-      </BrowserRouter>
-    </div>
+        </Container>
+        <Footer />
+      </div>
+    </BrowserRouter>
   );
 }
-
-
-export default App;
