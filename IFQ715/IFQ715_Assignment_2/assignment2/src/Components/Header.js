@@ -1,5 +1,7 @@
-import { Link, useResolvedPath, useMatch } from "react-router-dom";
+import { Link, useResolvedPath, useMatch, useNavigate } from "react-router-dom";
 import { Navbar, Nav, Container } from "react-bootstrap";
+import "./components.css"
+
 
 function HighlightLink({ to, children }) {
   let resolved = useResolvedPath(to);
@@ -12,32 +14,43 @@ function HighlightLink({ to, children }) {
 }
 
 export default function Header({ isLoggedIn, setIsLoggedIn }) {
+  const navigate = useNavigate();
+
+  // when it is trigger, set isLoggedIn to false and remove token so a user is not able to access the contents which requires tokes/loging state
   function handleLogOut() {
-    localStorage.removeItem("token");
+    localStorage.removeItem("token"); 
     setIsLoggedIn(false);
+    navigate("/")
   }
   return (
-    <header className="bg-primary text-white">
-      <Container>
+    <header className="bg-color text-white">
+      <Container fluid>
         <Navbar expand="lg" variant="dark">
-          <Navbar.Brand as={Link} to="/">
-            My Application
-          </Navbar.Brand>
-          <Nav className="ms-auto">
+
+        {/* Contents links to be located left side */}
+          <Nav className="me-auto">
+            <Navbar.Brand as={Link} to="/">
+              Happiness Data
+            </Navbar.Brand>
             <HighlightLink to="/">Home</HighlightLink>
-            {!isLoggedIn && <HighlightLink to="/login">Login</HighlightLink>}
-            {!isLoggedIn && (
-              <HighlightLink to="/register">Register</HighlightLink>
-            )}
+            {/* Show only  */}
             {isLoggedIn && <HighlightLink to="/factors">Factors</HighlightLink>}
             {isLoggedIn && (
               <HighlightLink to="/rankings">Rankings</HighlightLink>
             )}
-            {isLoggedIn ? (
+          </Nav>
+
+          {/* Login features to be located right side */}
+          <Nav className="ms-auto">
+            {!isLoggedIn && <HighlightLink to="/login">Login</HighlightLink>}
+            {!isLoggedIn && (
+              <HighlightLink to="/register">Register</HighlightLink>
+            )}
+            {isLoggedIn && (
               <Nav.Link to="/" as={Link} onClick={handleLogOut}>
                 Logout
               </Nav.Link>
-            ) : null}
+            )}
           </Nav>
         </Navbar>
       </Container>

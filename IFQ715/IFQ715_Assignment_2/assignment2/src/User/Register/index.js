@@ -1,6 +1,6 @@
 import { useState } from "react";
 import TextField from "../../Components/TextField";
-import { Form } from "react-bootstrap";
+import { Form, Row, Col, Alert, Button } from "react-bootstrap";
 
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -8,7 +8,7 @@ export default function Register() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
-  const register = (event) => {
+  const handleRegister = (event) => {
     event.preventDefault();
 
     const API_URL = `https://d2h6rsg43otiqk.cloudfront.net/prod/user/register`;
@@ -26,8 +26,12 @@ export default function Register() {
     })
       .then((response) => response.json())
       .then((data) => {
-        if(data.error){
-            setMessage(data.message);
+        console.log("data", data);
+        setMessage(data.message);
+        setError(data.error);
+
+        if (data.error) {
+          setMessage(data.message);
         }
       })
       .catch((error) => {
@@ -38,23 +42,51 @@ export default function Register() {
 
   return (
     <div>
-      <h2>Register Page</h2>
-      <p>This is the Register page content.</p>
-      <Form onSubmit={register}>
-        {message ? <p style={{ color: error ? "red" : "green" }}>{message}</p> : null}
-        <TextField
-          text="Email"
-          type="email"
-          onChange={setEmail}
-          value={email}
-        />
-        <TextField
-          text="Password"
-          type="password"
-          onChange={setPassword}
-          value={password}
-        />
-        <button type="submit">Register</button>
+      <h2 className="text-center">Register</h2>
+      <p className="text-center">Create your account</p>
+      <Form onSubmit={handleRegister} className="justify-content-center">
+        <Row
+          className="justify-content-center mt-3"
+          justify-content-center
+          mt-3
+        >
+          <Col md={4}>
+            {message ? (
+              <Alert variant={!error ? "success" : "danger"}>
+                {message}
+              </Alert>
+            ) : null}
+          </Col>
+        </Row>
+        <Row className="justify-content-center">
+          <Col md={4}>
+            <TextField
+              text="Email"
+              type="email"
+              onChange={setEmail}
+              value={email}
+            />
+          </Col>
+        </Row>
+
+        <Row className="justify-content-center mt-3">
+          <Col md={4}>
+            <TextField
+              text="Password"
+              type="password"
+              onChange={setPassword}
+              value={password}
+            />
+          </Col>
+        </Row>
+
+        <Row className="justify-content-center mt-3">
+          <Col md="auto">
+            <Button type="submit" variant="primary">
+              Register
+            </Button>
+          </Col>
+        </Row>
       </Form>
     </div>
   );

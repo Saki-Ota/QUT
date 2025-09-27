@@ -7,6 +7,8 @@ export default function SelectField({
   Component = Form.Select,
   value,
   onChange,
+  palceholder,
+  firstOption,
 }) {
   let id = `select${text}`;
   return (
@@ -17,11 +19,12 @@ export default function SelectField({
       <Component
         id={id}
         value={value}
+        palceholder={palceholder}
         onChange={(event) => {
           onChange(event.target.value);
         }}
       >
-        <option value="">Open this select menu</option>
+        <option value="">{firstOption}</option>
 
         {options &&
           options.map((option) => <option key={option} value={option}>{option}</option>)}

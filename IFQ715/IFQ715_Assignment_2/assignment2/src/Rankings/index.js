@@ -1,12 +1,11 @@
 import { useRankings, useCountries } from "../api";
-import { Form, Table } from "react-bootstrap";
-import { use, useState } from "react";
+import { Form, Table, Col, Row } from "react-bootstrap";
+import { useState } from "react";
+import { Navigate } from "react-router-dom";
 
 import SelectField from "../Components/SelectField";
-import TextField from "../Components/TextField";
 
-
-export default function Rankings() {
+export default function Rankings({isLoggedIn}) {
   const [country, setCountry] = useState("");
   const [year, setYear] = useState("");
   const [submitted, setSubmitted] = useState(false); 
@@ -16,8 +15,16 @@ export default function Rankings() {
     year: "",
   });
 
-  const { loading, rankings, error } = useRankings(params.country, params.year);
+  // check api.js useRankings should only be called when a parameter is changed
+  const { loading, rankings, error } = useRankings(params.country, params.year); 
   const { countriesLoading, countries, countriesError } = useCountries();
+
+  const years = [2015, 2016, 2017, 2018, 2019, 2020]; // limit year options
+
+  // redirect to home if login state is false, not render ranking page
+  if (!isLoggedIn) {
+    return <Navigate to="/" replace />;
+  }
 
   const handleRankingsSubmit = (event) => {
     event.preventDefault();
@@ -41,8 +48,9 @@ export default function Rankings() {
     if (!rankings || rankings.length === 0) {
       return <p>No rankings found</p>;
     }
+    console.log(rankings);
+
     return (
-      console.log(rankings),
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -74,8 +82,9 @@ export default function Rankings() {
     if (!rankings || rankings.length === 0) {
       return <p>No rankings found</p>;
     }
+    console.log(rankings)
+
     return (
-      console.log(rankings),
       (
         <Table striped bordered hover>
           <thead>
@@ -102,23 +111,44 @@ export default function Rankings() {
 
   return (
     <div>
-      <h2>Rankings Page</h2>
-      <p>Please select a country, year or both to see rankings</p>
-      <Form onSubmit={handleRankingsSubmit}>
-        <SelectField
-          text="Country"
-          options={countries}
-          onChange={setCountry}
-          value={country}
-        />
-        <TextField text="Year" type="number" onChange={setYear} value={year} />
-        <button type="submit" className="btn btn-primary mb-2">
-          Search
-        </button>
+      <h2 className="mt-3 text-center">Happiness Rankings</h2>
+      <p className="text-center">
+        Please select a country, year or both to see rankings
+      </p>
+      <Form onSubmit={handleRankingsSubmit} className="mb-5">
+        <Row className="align-items-end">
+          <Col>
+            <SelectField
+              text="Country"
+              options={countries}
+              onChange={setCountry}
+              value={country}
+              firstOption="Select a country"
+            />
+          </Col>
+          <Col>
+            <SelectField
+              text="Year"
+              options={years}
+              onChange={setYear}
+              value={year}
+              firstOption="Select a year"
+            />
+          </Col>
+          <Col xs="auto">
+            <button type="submit" className="btn btn-primary">
+              Search
+            </button>
+          </Col>
+        </Row>
       </Form>
-      {(submitted && !params.country && !params.year) && <p>Please select a country or year.</p>}
-      {(params.country) && renderCountryResults()}
-      {(params.year && !params.country) && renderYearResults()}
+      {submitted && !params.country && !params.year && (
+        <p>Please select a country or year.</p>
+      )}
+      {/* when country value is changed*/}
+      {params.country && renderCountryResults()}
+      {/* when country value is not changed*/}
+      {params.year && !params.country && renderYearResults()}
     </div>
   );
 }

@@ -7,7 +7,6 @@ export default function Login({setIsLoggedIn}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
-//   const[ isLoggedIn, setIsLoggedIn] = useState(false);
 
   const navigate = useNavigate();
 
@@ -31,6 +30,7 @@ export default function Login({setIsLoggedIn}) {
         if (data.error) {
           setMessage(data.message);
         } else {
+          // if login was succssful, store JWT locally, change loginState to true then go back to home
           localStorage.setItem("token", data.token);
           setIsLoggedIn(true);
           navigate({ pathname: "/" });
@@ -43,25 +43,48 @@ export default function Login({setIsLoggedIn}) {
 
   return (
     <div>
-      <h2>Login Page</h2>
-      <p>This is the Login page content.</p>
+      <h2 className="text-center">Login</h2>
+      <p className="text-center">
+        Don't have account? Create an <a href="../Register">account</a>
+      </p>
       <Form onSubmit={handleLogin}>
-        {message ? <Alert variant="danger">{message}</Alert> : null}
-        <TextField
-          text="Email"
-          type="email"
-          onChange={setEmail}
-          value={email}
-        />
-        <TextField
-          text="Password"
-          type="password"
-          onChange={setPassword}
-          value={password}
-        />
-        <Button type="submit" variant="primary" className="mt-3">
-          Login
-        </Button>
+        {message ? (
+          <Row className="justify-content-center mt-3">
+            <Col md={4}>
+              <Alert variant="danger">{message}</Alert>
+            </Col>
+          </Row>
+        ): null}
+
+        <Row className="justify-content-center">
+          <Col md={4}>
+            <TextField
+              text="Email"
+              type="email"
+              onChange={setEmail}
+              value={email}
+            />
+          </Col>
+        </Row>
+
+        <Row className="justify-content-center mt-3">
+          <Col md={4}>
+            <TextField
+              text="Password"
+              type="password"
+              onChange={setPassword}
+              value={password}
+            />
+          </Col>
+        </Row>
+
+        <Row className="justify-content-center mt-3">
+          <Col md="auto">
+            <Button type="submit" variant="primary">
+              Login
+            </Button>
+          </Col>
+        </Row>
       </Form>
     </div>
   );
