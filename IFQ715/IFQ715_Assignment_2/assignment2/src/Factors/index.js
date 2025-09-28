@@ -36,7 +36,8 @@ export default function Factors({ isLoggedIn }) {
     event.preventDefault();
 
     if (!year) {
-      setErrorMessage("Year is required"); // If year is missing, API is not called
+      setErrorMessage("Year is required"); 
+      console.log('useFactor is not triggerred')// If year is missing, API is not called
       return;
     }
 

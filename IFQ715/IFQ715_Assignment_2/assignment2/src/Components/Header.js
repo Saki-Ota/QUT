@@ -33,7 +33,7 @@ export default function Header({ isLoggedIn, setIsLoggedIn }) {
               Happiness Data
             </Navbar.Brand>
             <HighlightLink to="/">Home</HighlightLink>
-            {/* Show only  */}
+            {/* Show Factors and Rankings only user is logged in  */}
             {isLoggedIn && <HighlightLink to="/factors">Factors</HighlightLink>}
             {isLoggedIn && (
               <HighlightLink to="/rankings">Rankings</HighlightLink>

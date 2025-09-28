@@ -30,6 +30,8 @@ export default function Rankings({isLoggedIn}) {
     event.preventDefault();
     setSubmitted(true);
 
+    if(!country && !year) return; // if no paramters, not calling API 
+
     setParams({
       country: country || "",
       year: year ? Number(year) : "",

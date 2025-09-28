@@ -31,8 +31,8 @@ function getCountriesByQuery() {
 function getFactorsByQuery(year, limit, country) {
   const baseUrl = `https://d2h6rsg43otiqk.cloudfront.net/prod/factors/${year}`;
 
-  const params = new URLSearchParams();
-
+// add params only when limit or country params are updated, otherwise request endpoint only includes year 
+  const params = new URLSearchParams(); 
   if (limit) params.append("limit", limit);
   if (country) params.append("country", country);
 

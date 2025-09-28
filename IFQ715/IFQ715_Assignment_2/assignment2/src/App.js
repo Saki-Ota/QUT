@@ -1,9 +1,12 @@
 import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+
 import { Container } from "react-bootstrap";
 import { useState } from "react";
-
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+// function to check token is still valid
+import {jwtDecode} from "jwt-decode";
+
 import Home from "./Home";
 import Factors from "./Factors";
 import Rankings from "./Rankings";
@@ -13,11 +16,12 @@ import Register from "./User/Register";
 import Header from "./Components/Header";
 import Footer from "./Components/Footer";
 
-// function to check token is still valid
-import {jwtDecode} from "jwt-decode";
+
 
 const isTokenExpired = (token) => {
-  if (!token) return true;
+  if (!token) return true; // if token is not found return true 
+
+  // if token is stored, decode the token and check if it is expired 
   try {
     const decodedToken = jwtDecode(token);
     const currentTime = Date.now() / 1000;
@@ -35,7 +39,7 @@ function App() {
       ? true
       : false
   );
-  console.log(localStorage.getItem("token"));
+  console.log('token', localStorage.getItem("token"));
   console.log(`App: isLoggedIn = ${isLoggedIn}`);
   console.log('token expired?', isTokenExpired(localStorage.getItem("token")))
 
@@ -59,7 +63,7 @@ function App() {
               />
               <Route
                 path="/login"
-                element={<Login setIsLoggedIn={setIsLoggedIn} />} // change isLoggedIn state to true if successful 
+                element={<Login setIsLoggedIn={setIsLoggedIn} />} // update isLoggedIn state to true if successful 
               />
               <Route path="/register" element={<Register />} />
             </Routes>
