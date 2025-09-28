@@ -45,16 +45,10 @@ export default function Register() {
       <h2 className="text-center">Register</h2>
       <p className="text-center">Create your account</p>
       <Form onSubmit={handleRegister} className="justify-content-center">
-        <Row
-          className="justify-content-center mt-3"
-          justify-content-center
-          mt-3
-        >
+        <Row className="justify-content-center mt-3">
           <Col md={4}>
             {message ? (
-              <Alert variant={!error ? "success" : "danger"}>
-                {message}
-              </Alert>
+              <Alert variant={!error ? "success" : "danger"}>{message}</Alert>
             ) : null}
           </Col>
         </Row>
