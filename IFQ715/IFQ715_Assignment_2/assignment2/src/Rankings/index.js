@@ -119,7 +119,7 @@ export default function Rankings({isLoggedIn}) {
       </p>
       <Form onSubmit={handleRankingsSubmit} className="mb-5">
         <Row className="align-items-end">
-          <Col>
+          <Col sm={12} md>
             <SelectField
               text="Country"
               options={countries}
@@ -128,7 +128,7 @@ export default function Rankings({isLoggedIn}) {
               firstOption="Select a country"
             />
           </Col>
-          <Col>
+          <Col sm={12} md>
             <SelectField
               text="Year"
               options={years}

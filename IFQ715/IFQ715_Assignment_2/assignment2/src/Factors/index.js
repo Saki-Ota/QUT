@@ -61,36 +61,38 @@ export default function Factors({ isLoggedIn }) {
     if (error) return <p style={{ color: "red" }}>Error: {error.message}</p>;
     if (!factors || factors.length === 0) return <p>No factors found</p>;
     return (
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>Rank</th>
-            <th>Country</th>
-            <th>Score</th>
-            <th>Economy</th>
-            <th>Family</th>
-            <th>Health</th>
-            <th>Freedom</th>
-            <th>Generosity</th>
-            <th>Trust</th>
-          </tr>
-        </thead>
-        <tbody>
-          {factors.map((factor, index) => (
-            <tr key={index}>
-              <td>{factor.rank}</td>
-              <td>{factor.country}</td>
-              <td>{factor.score}</td>
-              <td>{factor.economy}</td>
-              <td>{factor.family}</td>
-              <td>{factor.health}</td>
-              <td>{factor.freedom}</td>
-              <td>{factor.generosity}</td>
-              <td>{factor.trust}</td>
+      <div className="table-responsive">
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Country</th>
+              <th>Score</th>
+              <th>Economy</th>
+              <th>Family</th>
+              <th>Health</th>
+              <th>Freedom</th>
+              <th>Generosity</th>
+              <th>Trust</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {factors.map((factor, index) => (
+              <tr key={index}>
+                <td>{factor.rank}</td>
+                <td>{factor.country}</td>
+                <td>{factor.score}</td>
+                <td>{factor.economy}</td>
+                <td>{factor.family}</td>
+                <td>{factor.health}</td>
+                <td>{factor.freedom}</td>
+                <td>{factor.generosity}</td>
+                <td>{factor.trust}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
     );
   }
 
@@ -104,7 +106,7 @@ export default function Factors({ isLoggedIn }) {
       <Form onSubmit={handleFactorsSubmit} className="mb-5">
         {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
         <Row className="align-items-end">
-          <Col>
+          <Col sm={12} md>
             <SelectField
               text="Country (Optional)"
               options={countries}
@@ -113,7 +115,7 @@ export default function Factors({ isLoggedIn }) {
               firstOption="Select a country"
             />
           </Col>
-          <Col>
+          <Col sm={12} md>
             <SelectField
               text="Year *"
               options={years}
@@ -122,7 +124,7 @@ export default function Factors({ isLoggedIn }) {
               firstOption="Select a year"
             />
           </Col>
-          <Col>
+          <Col sm={12} md>
             <TextField
               text="Limit (Optional)"
               type="number"
@@ -131,8 +133,8 @@ export default function Factors({ isLoggedIn }) {
               value={limit}
             />
           </Col>
-          <Col xs="auto">
-            <button type="submit" className="btn btn-primary">
+          <Col xs={12} md='auto'>
+            <button type="submit" className="btn btn-primary ">
               Search
             </button>
           </Col>
